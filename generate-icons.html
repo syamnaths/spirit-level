@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Spirit Level Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        canvas {
+            display: none;
+        }
+        .icon-preview {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        .icon-preview img {
+            border: 1px solid #ccc;
+            background: white;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spirit Level Icon Generator</h1>
+    <p>Click the button below to generate and download all required PWA icons.</p>
+    <button onclick="generateAllIcons()">Generate All Icons</button>
+    <div id="previews"></div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+
+        function drawIcon(ctx, size) {
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+
+            // Background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#1a1a1a');
+            gradient.addColorStop(1, '#2d2d2d');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+
+            // Draw spirit level vial
+            const vialWidth = size * 0.8;
+            const vialHeight = size * 0.3;
+            const vialX = (size - vialWidth) / 2;
+            const vialY = (size - vialHeight) / 2;
+            const radius = vialHeight / 2;
+
+            // Vial background
+            ctx.fillStyle = '#c8e6c9';
+            ctx.beginPath();
+            ctx.moveTo(vialX + radius, vialY);
+            ctx.lineTo(vialX + vialWidth - radius, vialY);
+            ctx.arcTo(vialX + vialWidth, vialY, vialX + vialWidth, vialY + radius, radius);
+            ctx.lineTo(vialX + vialWidth, vialY + vialHeight - radius);
+            ctx.arcTo(vialX + vialWidth, vialY + vialHeight, vialX + vialWidth - radius, vialY + vialHeight, radius);
+            ctx.lineTo(vialX + radius, vialY + vialHeight);
+            ctx.arcTo(vialX, vialY + vialHeight, vialX, vialY + vialHeight - radius, radius);
+            ctx.lineTo(vialX, vialY + radius);
+            ctx.arcTo(vialX, vialY, vialX + radius, vialY, radius);
+            ctx.closePath();
+            ctx.fill();
+
+            // Vial border
+            ctx.strokeStyle = '#2e7d32';
+            ctx.lineWidth = size * 0.015;
+            ctx.stroke();
+
+            // Center mark
+            ctx.strokeStyle = '#f44336';
+            ctx.lineWidth = size * 0.01;
+            ctx.beginPath();
+            ctx.moveTo(size / 2, vialY + vialHeight * 0.2);
+            ctx.lineTo(size / 2, vialY + vialHeight * 0.8);
+            ctx.stroke();
+
+            // Bubble
+            const bubbleRadius = vialHeight * 0.35;
+            const bubbleGradient = ctx.createRadialGradient(
+                size / 2 - bubbleRadius * 0.3,
+                vialY + vialHeight / 2 - bubbleRadius * 0.3,
+                0,
+                size / 2,
+                vialY + vialHeight / 2,
+                bubbleRadius
+            );
+            bubbleGradient.addColorStop(0, '#e0ff00');
+            bubbleGradient.addColorStop(1, '#76FF03');
+            ctx.fillStyle = bubbleGradient;
+            ctx.beginPath();
+            ctx.arc(size / 2, vialY + vialHeight / 2, bubbleRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Bubble shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.beginPath();
+            ctx.arc(size / 2 + bubbleRadius * 0.2, vialY + vialHeight / 2 + bubbleRadius * 0.2, bubbleRadius * 0.8, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function generateIcon(size) {
+            const canvas = document.getElementById('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            drawIcon(ctx, size);
+
+            return canvas.toDataURL('image/png');
+        }
+
+        function downloadIcon(dataUrl, size) {
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = dataUrl;
+            link.click();
+        }
+
+        function generateAllIcons() {
+            const previewsDiv = document.getElementById('previews');
+            previewsDiv.innerHTML = '';
+
+            sizes.forEach(size => {
+                const dataUrl = generateIcon(size);
+
+                // Create preview
+                const preview = document.createElement('div');
+                preview.className = 'icon-preview';
+
+                const img = document.createElement('img');
+                img.src = dataUrl;
+                img.width = Math.min(size, 128);
+                img.height = Math.min(size, 128);
+
+                const label = document.createElement('div');
+                label.textContent = `${size}x${size}`;
+
+                preview.appendChild(img);
+                preview.appendChild(label);
+                previewsDiv.appendChild(preview);
+
+                // Auto-download
+                setTimeout(() => downloadIcon(dataUrl, size), 100 * sizes.indexOf(size));
+            });
+
+            alert('All icons generated! Check your downloads folder.');
+        }
+    </script>
+</body>
+</html>

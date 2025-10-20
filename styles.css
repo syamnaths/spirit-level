@@ -1,0 +1,746 @@
+/* ========================================
+   GLOBAL STYLES & RESET
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color Palette - High Contrast */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+
+    /* Spirit Level Colors */
+    --level-green: #4CAF50;
+    --level-yellow: #FFC107;
+    --level-red: #f44336;
+    --vial-bg: #e8f5e9;
+    --vial-border: #2e7d32;
+    --bubble-color: #76FF03;
+
+    /* Shadows & Effects */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* ========================================
+   OVERLAY STYLES
+   ======================================== */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.permission-dialog {
+    background: var(--bg-secondary);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: var(--shadow-lg);
+}
+
+.permission-dialog h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: var(--level-yellow);
+}
+
+.permission-dialog p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+}
+
+/* ========================================
+   BUTTON STYLES
+   ======================================== */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background: var(--level-green);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #45a049;
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--level-green);
+}
+
+.btn-secondary:hover {
+    background: #3d3d3d;
+}
+
+.btn-secondary.active {
+    background: var(--level-green);
+    color: white;
+}
+
+/* ========================================
+   APP CONTAINER
+   ======================================== */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+/* ========================================
+   HEADER CONTROLS
+   ======================================== */
+.app-header {
+    padding: 15px;
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+.mode-selector {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mode-btn.active {
+    background: var(--level-green);
+    color: white;
+    border-color: var(--level-green);
+    box-shadow: var(--shadow-md);
+}
+
+.mode-btn:hover:not(.active) {
+    border-color: var(--level-green);
+}
+
+/* ========================================
+   LEVEL CONTAINER (MAIN)
+   ======================================== */
+.level-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+}
+
+/* ========================================
+   ANGLE DISPLAY
+   ======================================== */
+.angle-display {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.angle-value {
+    display: block;
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--level-green);
+    text-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+    transition: color 0.3s ease;
+    font-variant-numeric: tabular-nums;
+}
+
+.angle-value.off-level {
+    color: var(--level-red);
+    text-shadow: 0 0 20px rgba(244, 67, 54, 0.5);
+}
+
+.level-status {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--level-green);
+    margin-top: 10px;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
+}
+
+.level-status.off-level {
+    color: var(--level-red);
+}
+
+/* ========================================
+   VIAL CONTAINER
+   ======================================== */
+.vial-container {
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+
+.vial {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(180deg, #c8e6c9 0%, #e8f5e9 50%, #c8e6c9 100%);
+    border: 4px solid var(--vial-border);
+    border-radius: 60px;
+    box-shadow:
+        inset 0 4px 8px rgba(0, 0, 0, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* Scale Marks */
+.scale-marks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.mark {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 60%;
+    background: var(--vial-border);
+}
+
+.mark-center {
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 3px;
+    height: 80%;
+    background: var(--level-red);
+}
+
+.mark-left {
+    left: 40%;
+}
+
+.mark-right {
+    right: 40%;
+}
+
+.mark-left-far {
+    left: 20%;
+}
+
+.mark-right-far {
+    right: 20%;
+}
+
+/* Center Zone */
+.center-zone {
+    position: absolute;
+    left: 48%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 4%;
+    height: 90%;
+    background: rgba(76, 175, 80, 0.2);
+    border-left: 2px dashed var(--level-green);
+    border-right: 2px dashed var(--level-green);
+}
+
+/* Bubble */
+.bubble {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at 30% 30%, #e0ff00, #76FF03);
+    border-radius: 50%;
+    box-shadow:
+        inset -5px -5px 10px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: left 0.05s ease-out;
+    will-change: transform;
+}
+
+/* Bubble animation for level state */
+.bubble.level {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow:
+            inset -5px -5px 10px rgba(0, 0, 0, 0.3),
+            0 4px 8px rgba(0, 0, 0, 0.3),
+            0 0 0 0 rgba(76, 175, 80, 0.7);
+    }
+    50% {
+        box-shadow:
+            inset -5px -5px 10px rgba(0, 0, 0, 0.3),
+            0 4px 8px rgba(0, 0, 0, 0.3),
+            0 0 0 10px rgba(76, 175, 80, 0);
+    }
+}
+
+/* ========================================
+   ANGLE FINDER (PROTRACTOR MODE)
+   ======================================== */
+.angle-finder-container {
+    width: 90%;
+    max-width: 400px;
+}
+
+.angle-finder-container.hidden {
+    display: none;
+}
+
+.protractor {
+    width: 100%;
+}
+
+.protractor-svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.degree-marks text {
+    fill: var(--text-primary);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.degree-marks line {
+    stroke: var(--level-green);
+    stroke-width: 1;
+}
+
+/* ========================================
+   FOOTER CONTROLS
+   ======================================== */
+.app-footer {
+    padding: 15px;
+    background: var(--bg-secondary);
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-footer .btn {
+    flex: 1 1 auto;
+    min-width: 90px;
+    max-width: 150px;
+    font-size: 14px;
+    padding: 11px 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ========================================
+   VERTICAL MODE ADJUSTMENTS
+   ======================================== */
+.vial-container.vertical {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.vial-container.vertical .vial {
+    transform: rotate(90deg);
+    transform-origin: center center;
+    width: 400px;
+    max-width: 80vh;
+    height: 120px;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 480px) {
+    .angle-value {
+        font-size: 48px;
+    }
+
+    .level-status {
+        font-size: 14px;
+    }
+
+    .vial {
+        height: 100px;
+    }
+
+    .bubble {
+        width: 60px;
+        height: 60px;
+    }
+
+    .mode-btn {
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+
+    .app-footer {
+        padding: 10px;
+        gap: 6px;
+    }
+
+    .app-footer .btn {
+        font-size: 12px;
+        padding: 9px 12px;
+        min-width: 75px;
+    }
+
+    /* Vertical mode on small screens */
+    .vial-container.vertical {
+        min-height: 300px;
+    }
+
+    .vial-container.vertical .vial {
+        width: 300px;
+        height: 100px;
+    }
+
+    /* Angle finder on small screens */
+    .angle-finder-container {
+        width: 95%;
+        max-width: 320px;
+    }
+
+    .degree-marks text {
+        font-size: 8px;
+    }
+}
+
+@media (max-height: 600px) {
+    .angle-display {
+        margin-bottom: 15px;
+    }
+
+    .angle-value {
+        font-size: 48px;
+    }
+
+    .vial {
+        height: 80px;
+    }
+
+    .bubble {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Vertical mode on short screens */
+    .vial-container.vertical {
+        min-height: 250px;
+    }
+
+    .vial-container.vertical .vial {
+        width: 250px;
+        height: 80px;
+    }
+
+    /* Angle finder on short screens */
+    .angle-finder-container {
+        max-width: 280px;
+    }
+
+    .degree-marks text {
+        font-size: 7px;
+    }
+}
+
+/* ========================================
+   LANDSCAPE ORIENTATION
+   ======================================== */
+@media (orientation: landscape) {
+    .level-container {
+        padding: 10px;
+    }
+
+    .angle-display {
+        margin-bottom: 15px;
+    }
+
+    .angle-value {
+        font-size: 48px;
+    }
+
+    .level-status {
+        font-size: 16px;
+    }
+
+    .vial {
+        max-width: 500px;
+        height: 100px;
+    }
+
+    .bubble {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* Vertical mode in landscape */
+    .vial-container.vertical {
+        min-height: auto;
+    }
+
+    .vial-container.vertical .vial {
+        width: 60vw;
+        max-width: 500px;
+        height: 100px;
+    }
+
+    /* Angle finder in landscape */
+    .angle-finder-container {
+        max-width: 350px;
+    }
+}
+
+/* ========================================
+   PWA FULLSCREEN ADJUSTMENTS
+   ======================================== */
+@media (display-mode: standalone) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --level-green: #00ff00;
+        --level-red: #ff0000;
+        --level-yellow: #ffff00;
+    }
+}
+
+/* ========================================
+   EXTRA SMALL SCREENS
+   ======================================== */
+@media (max-width: 360px) {
+    .angle-value {
+        font-size: 40px;
+    }
+
+    .level-status {
+        font-size: 12px;
+    }
+
+    .vial {
+        height: 80px;
+    }
+
+    .bubble {
+        width: 50px;
+        height: 50px;
+    }
+
+    .vial-container.vertical .vial {
+        width: 250px;
+        height: 80px;
+    }
+
+    .angle-finder-container {
+        max-width: 280px;
+    }
+
+    .mode-btn {
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+
+    .app-footer {
+        padding: 10px;
+        gap: 6px;
+    }
+
+    .app-footer .btn {
+        font-size: 11px;
+        padding: 8px 10px;
+        min-width: 65px;
+    }
+}
+
+/* ========================================
+   COMBINED RESPONSIVE ADJUSTMENTS
+   ======================================== */
+@media (max-width: 480px) and (max-height: 700px) {
+    .angle-display {
+        margin-bottom: 20px;
+    }
+
+    .angle-value {
+        font-size: 44px;
+    }
+
+    .level-status {
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .level-container {
+        padding: 15px;
+    }
+}
+
+/* Landscape on small devices */
+@media (orientation: landscape) and (max-height: 500px) {
+    .angle-display {
+        margin-bottom: 10px;
+    }
+
+    .angle-value {
+        font-size: 36px;
+    }
+
+    .level-status {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .vial {
+        height: 70px;
+    }
+
+    .bubble {
+        width: 45px;
+        height: 45px;
+    }
+
+    .vial-container.vertical .vial {
+        height: 70px;
+    }
+
+    .angle-finder-container {
+        max-width: 250px;
+    }
+
+    .app-header {
+        padding: 10px;
+    }
+
+    .app-footer {
+        padding: 10px;
+    }
+
+    .mode-btn {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+
+    .app-footer {
+        padding: 10px 8px;
+        gap: 6px;
+    }
+
+    .app-footer .btn {
+        padding: 8px 10px;
+        font-size: 11px;
+        min-width: 70px;
+    }
+}
+
+/* ========================================
+   VERY SMALL SCREENS (wrapping footer)
+   ======================================== */
+@media (max-width: 320px) {
+    .app-footer {
+        padding: 8px 5px;
+        gap: 4px;
+    }
+
+    .app-footer .btn {
+        flex: 1 1 45%;
+        font-size: 10px;
+        padding: 8px;
+        min-width: 0;
+        max-width: none;
+    }
+
+    .angle-value {
+        font-size: 38px;
+    }
+
+    .level-status {
+        font-size: 12px;
+    }
+}

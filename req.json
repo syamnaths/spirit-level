@@ -1,0 +1,126 @@
+{
+    "project_name": "MobileSpiritLevel_PWA",
+    "version": "1.0.0",
+    "target_platforms": ["PWA (Web/Mobile Browser)"],
+    "primary_sensor": "DeviceOrientationEvent (Accelerometer Data)",
+    "requirements": {
+      "functional_requirements": [
+        {
+          "id": "FR001",
+          "description": "The app **must** display a **Horizontal Vial** (for leveling surfaces) using the phone's long edge.",
+          "priority": "High"
+        },
+        {
+          "id": "FR002",
+          "description": "The app **must** display a **Vertical Vial** (for plumbing walls/frames) using the phone's short edge.",
+          "priority": "High"
+        },
+        {
+          "id": "FR003",
+          "description": "The app **must** display an **Angle Finder (Protractor)** mode using the phone's back surface.",
+          "priority": "High"
+        },
+        {
+          "id": "FR004",
+          "description": "The vials and angle finder **must** update the 'bubble' position smoothly and in real-time based on motion sensor data.",
+          "priority": "High"
+        },
+        {
+          "id": "FR005",
+          "description": "The app **must** display the angle with a **numerical readout** to at least one decimal place (e.g., 0.1°).",
+          "priority": "High"
+        },
+        {
+          "id": "FR006",
+          "description": "The app **must** provide a user-initiated **Calibration Feature** to set the current surface as the 0.0° baseline.",
+          "priority": "High"
+        },
+        {
+          "id": "FR007",
+          "description": "The app **must** provide an optional **Audio/Haptic Feedback** (vibration/sound) when the angle is within a tolerance (e.g., ±0.2°) of **0.0°** or **90.0°**.",
+          "priority": "Medium"
+        },
+        {
+          "id": "FR008",
+          "description": "The app **must** include a **'Hold'** or **'Lock'** button to freeze the current angle on the screen for reading or transferring.",
+          "priority": "Medium"
+        },
+        {
+          "id": "FR009",
+          "description": "The app **must** display a request for user permission to access motion sensors (required by iOS and newer Android browsers).",
+          "priority": "High"
+        },
+        {
+          "id": "FR010",
+          "description": "The PWA **must** be installable via a Web App Manifest, allowing it to run fullscreen outside the browser chrome.",
+          "priority": "High"
+        },
+        {
+          "id": "FR011",
+          "description": "The PWA **must** function **offline** (cached by the Service Worker).",
+          "priority": "Medium"
+        }
+      ],
+      "non_functional_requirements": [
+        {
+          "id": "NFR001",
+          "description": "The UI **must** maintain a minimum refresh rate of **30 FPS** for smooth animation of the bubble using optimized CSS animations or the 'requestAnimationFrame' API.",
+          "priority": "High",
+          "category": "Performance"
+        },
+        {
+          "id": "NFR002",
+          "description": "The angular accuracy of the numerical readout must be within **±0.2°** after user calibration.",
+          "priority": "High",
+          "category": "Accuracy"
+        },
+        {
+          "id": "NFR003",
+          "description": "The app **must** apply a digital filter (e.g., **JavaScript-implemented Low-Pass Filter**) to sensor data to minimize noise and stabilize readings.",
+          "priority": "High",
+          "category": "Stability"
+        },
+        {
+          "id": "NFR004",
+          "description": "The application's interface **must** use a **high-contrast color scheme** for visibility in bright and low-light conditions.",
+          "priority": "High",
+          "category": "Usability/Accessibility"
+        },
+        {
+          "id": "NFR005",
+          "description": "The application **must** be optimized for minimal battery consumption, ensuring the sensor listener is only active when the app is in the foreground.",
+          "priority": "Medium",
+          "category": "Performance/Battery"
+        },
+        {
+          "id": "NFR006",
+          "description": "The app **must** include a fallback message for browsers that do not support the Device Orientation API or do not grant sensor access.",
+          "priority": "High",
+          "category": "Compatibility"
+        }
+      ],
+      "ui_ux_requirements": [
+        {
+          "id": "UIX001",
+          "description": "The UI **must** visually resemble a traditional green/yellow spirit level, using color to indicate level status (e.g., Green for level/plumb, Red for off-level).",
+          "priority": "High"
+        },
+        {
+          "id": "UIX002",
+          "description": "The numerical angle readout **must** be large, clear, and centrally located.",
+          "priority": "High"
+        },
+        {
+          "id": "UIX003",
+          "description": "The app **must** support both **Portrait** and **Landscape** orientations for the Angle Finder mode.",
+          "priority": "Medium"
+        }
+      ]
+    },
+    "technology_specifications": {
+      "sensor_specification": {
+        "primary_sensor": {
+          "name": "Device Orientation API (alpha/beta angles)",
+          "purpose": "Provides the orientation of the device in 3D space relative to the Earth's coordinate frame, which is used to calculate the tilt angle."
+        }
+      },

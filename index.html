@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="description" content="Mobile Spirit Level - Professional PWA tool for leveling and angle measurement">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-fullscreen">
+    <meta name="apple-mobile-web-app-title" content="Spirit Level">
+    <title>Spirit Level - PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+    <!-- Permission Request Overlay -->
+    <div id="permissionOverlay" class="overlay">
+        <div class="permission-dialog">
+            <h2>Sensor Access Required</h2>
+            <p>This app needs access to your device's motion sensors to function as a spirit level.</p>
+            <button id="requestPermissionBtn" class="btn btn-primary">Grant Access</button>
+        </div>
+    </div>
+
+    <!-- Unsupported Browser Overlay -->
+    <div id="unsupportedOverlay" class="overlay hidden">
+        <div class="permission-dialog">
+            <h2>Browser Not Supported</h2>
+            <p>Your browser doesn't support the Device Orientation API required for this app.</p>
+            <p>Please use a modern mobile browser like Chrome, Safari, or Firefox.</p>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container">
+        <!-- Header Controls -->
+        <header class="app-header">
+            <div class="mode-selector">
+                <button id="modeHorizontal" class="mode-btn active" data-mode="horizontal">
+                    <span>Horizontal</span>
+                </button>
+                <button id="modeVertical" class="mode-btn" data-mode="vertical">
+                    <span>Vertical</span>
+                </button>
+                <button id="modeAngle" class="mode-btn" data-mode="angle">
+                    <span>Angle</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Spirit Level Display -->
+        <main class="level-container">
+            <!-- Angle Readout -->
+            <div class="angle-display">
+                <span id="angleValue" class="angle-value">0.0°</span>
+                <span id="levelStatus" class="level-status">LEVEL</span>
+            </div>
+
+            <!-- Vial Container -->
+            <div id="vialContainer" class="vial-container">
+                <div class="vial">
+                    <!-- Scale Marks -->
+                    <div class="scale-marks">
+                        <div class="mark mark-center"></div>
+                        <div class="mark mark-left"></div>
+                        <div class="mark mark-right"></div>
+                        <div class="mark mark-left-far"></div>
+                        <div class="mark mark-right-far"></div>
+                    </div>
+
+                    <!-- Bubble -->
+                    <div id="bubble" class="bubble"></div>
+
+                    <!-- Center Zone Indicator -->
+                    <div class="center-zone"></div>
+                </div>
+            </div>
+
+            <!-- Angle Finder Display (for protractor mode) -->
+            <div id="angleFinderContainer" class="angle-finder-container hidden">
+                <div class="protractor">
+                    <svg viewBox="0 0 300 200" class="protractor-svg">
+                        <!-- Protractor arc -->
+                        <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#4CAF50" stroke-width="2"/>
+
+                        <!-- Degree marks -->
+                        <g id="degreeMarks" class="degree-marks">
+                            <!-- Will be populated by JavaScript -->
+                        </g>
+
+                        <!-- Angle indicator line -->
+                        <line id="angleLine" x1="150" y1="150" x2="150" y2="50" stroke="#ff0000" stroke-width="3"/>
+
+                        <!-- Center point -->
+                        <circle cx="150" cy="150" r="5" fill="#ff0000"/>
+                    </svg>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Controls -->
+        <footer class="app-footer">
+            <button id="calibrateBtn" class="btn btn-secondary">
+                <span>Calibrate</span>
+            </button>
+            <button id="holdBtn" class="btn btn-secondary">
+                <span id="holdBtnText">Hold</span>
+            </button>
+            <button id="feedbackToggle" class="btn btn-secondary">
+                <span id="feedbackBtnText">Feedback: ON</span>
+            </button>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
