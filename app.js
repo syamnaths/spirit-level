@@ -62,8 +62,10 @@ class SpiritLevel {
         };
 
         // Display elements
+        this.angleDisplay = document.querySelector('.angle-display');
         this.angleValue = document.getElementById('angleValue');
         this.levelStatus = document.getElementById('levelStatus');
+        this.protractorAngleValue = document.getElementById('protractorAngleValue');
         this.bubble = document.getElementById('bubble');
         this.vialContainer = document.getElementById('vialContainer');
         this.angleFinderContainer = document.getElementById('angleFinderContainer');
@@ -318,16 +320,15 @@ class SpiritLevel {
     updateAngleDisplay(angle) {
         // Format angle to 1 decimal place
         const formattedAngle = Math.abs(angle).toFixed(1);
-        this.angleValue.textContent = `${formattedAngle}°`;
 
         // Different display logic for angle mode vs level modes
         if (this.currentMode === 'angle') {
-            // In angle mode, just show the measurement type
-            this.angleValue.classList.remove('off-level');
-            this.levelStatus.classList.remove('off-level');
-            this.levelStatus.textContent = 'ANGLE MEASUREMENT';
+            // In angle mode, update the protractor angle display
+            this.protractorAngleValue.textContent = `${formattedAngle}°`;
         } else {
             // In horizontal/vertical modes, show level status
+            this.angleValue.textContent = `${formattedAngle}°`;
+
             if (Math.abs(angle) <= this.levelTolerance) {
                 this.angleValue.classList.remove('off-level');
                 this.levelStatus.classList.remove('off-level');
@@ -401,10 +402,14 @@ class SpiritLevel {
 
         // Show/hide appropriate display
         if (mode === 'angle') {
+            // Angle mode: hide vial and angle display, show protractor
             this.vialContainer.classList.add('hidden');
+            this.angleDisplay.classList.add('hidden');
             this.angleFinderContainer.classList.remove('hidden');
         } else {
+            // Level modes: show vial and angle display, hide protractor
             this.vialContainer.classList.remove('hidden');
+            this.angleDisplay.classList.remove('hidden');
             this.angleFinderContainer.classList.add('hidden');
 
             // Toggle vertical rotation

@@ -357,6 +357,20 @@ body {
     display: none;
 }
 
+.protractor-angle-display {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.protractor-angle-value {
+    display: block;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--level-green);
+    text-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+    font-variant-numeric: tabular-nums;
+}
+
 .protractor {
     width: 100%;
 }
@@ -474,6 +488,10 @@ body {
         max-width: 320px;
     }
 
+    .protractor-angle-value {
+        font-size: 44px;
+    }
+
     .degree-marks text {
         font-size: 8px;
     }
@@ -510,6 +528,14 @@ body {
     /* Angle finder on short screens */
     .angle-finder-container {
         max-width: 280px;
+    }
+
+    .protractor-angle-display {
+        margin-bottom: 15px;
+    }
+
+    .protractor-angle-value {
+        font-size: 40px;
     }
 
     .degree-marks text {
@@ -561,6 +587,14 @@ body {
     /* Angle finder in landscape */
     .angle-finder-container {
         max-width: 350px;
+    }
+
+    .protractor-angle-display {
+        margin-bottom: 15px;
+    }
+
+    .protractor-angle-value {
+        font-size: 44px;
     }
 }
 
@@ -621,6 +655,10 @@ body {
 
     .angle-finder-container {
         max-width: 280px;
+    }
+
+    .protractor-angle-value {
+        font-size: 38px;
     }
 
     .mode-btn {
