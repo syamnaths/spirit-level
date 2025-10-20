@@ -320,15 +320,23 @@ class SpiritLevel {
         const formattedAngle = Math.abs(angle).toFixed(1);
         this.angleValue.textContent = `${formattedAngle}°`;
 
-        // Update color based on level status
-        if (Math.abs(angle) <= this.levelTolerance) {
+        // Different display logic for angle mode vs level modes
+        if (this.currentMode === 'angle') {
+            // In angle mode, just show the measurement type
             this.angleValue.classList.remove('off-level');
             this.levelStatus.classList.remove('off-level');
-            this.levelStatus.textContent = 'LEVEL';
+            this.levelStatus.textContent = 'ANGLE MEASUREMENT';
         } else {
-            this.angleValue.classList.add('off-level');
-            this.levelStatus.classList.add('off-level');
-            this.levelStatus.textContent = `OFF BY ${formattedAngle}°`;
+            // In horizontal/vertical modes, show level status
+            if (Math.abs(angle) <= this.levelTolerance) {
+                this.angleValue.classList.remove('off-level');
+                this.levelStatus.classList.remove('off-level');
+                this.levelStatus.textContent = 'LEVEL';
+            } else {
+                this.angleValue.classList.add('off-level');
+                this.levelStatus.classList.add('off-level');
+                this.levelStatus.textContent = `OFF BY ${formattedAngle}°`;
+            }
         }
     }
 
