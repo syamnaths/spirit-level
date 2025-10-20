@@ -27,6 +27,9 @@ class SpiritLevel {
         // Permission granted flag
         this.permissionGranted = false;
 
+        // Screen orientation tracking
+        this.screenOrientation = 'portrait'; // portrait or landscape
+
         // Initialize
         this.init();
     }
@@ -39,6 +42,7 @@ class SpiritLevel {
         this.checkBrowserSupport();
         this.setupEventListeners();
         this.initializeProtractor();
+        this.detectOrientation();
 
         // Register Service Worker
         this.registerServiceWorker();
@@ -108,6 +112,10 @@ class SpiritLevel {
 
         // Page visibility (battery optimization)
         document.addEventListener('visibilitychange', () => this.handleVisibilityChange());
+
+        // Orientation change detection
+        window.addEventListener('orientationchange', () => this.detectOrientation());
+        window.addEventListener('resize', () => this.detectOrientation());
     }
 
     // ========================================
@@ -145,6 +153,23 @@ class SpiritLevel {
     }
 
     // ========================================
+    // ORIENTATION DETECTION
+    // ========================================
+    detectOrientation() {
+        // Detect if device is in portrait or landscape
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        if (width > height) {
+            this.screenOrientation = 'landscape';
+        } else {
+            this.screenOrientation = 'portrait';
+        }
+
+        console.log('Screen orientation:', this.screenOrientation);
+    }
+
+    // ========================================
     // SENSOR DATA HANDLING
     // ========================================
     handleOrientation(event) {
@@ -155,11 +180,26 @@ class SpiritLevel {
         // gamma: left-to-right tilt (-90 to 90)
         // alpha: compass direction (0 to 360)
 
-        this.rawAngles = {
-            x: event.beta || 0,   // Front-back tilt
-            y: event.gamma || 0,  // Left-right tilt
-            z: event.alpha || 0   // Compass direction
-        };
+        let beta = event.beta || 0;
+        let gamma = event.gamma || 0;
+        let alpha = event.alpha || 0;
+
+        // Adjust sensor readings based on screen orientation
+        if (this.screenOrientation === 'landscape') {
+            // In landscape mode, swap and adjust axes
+            this.rawAngles = {
+                x: -gamma,    // Gamma becomes the front-back tilt
+                y: beta,      // Beta becomes the left-right tilt
+                z: alpha      // Alpha stays the same
+            };
+        } else {
+            // Portrait mode - normal mapping
+            this.rawAngles = {
+                x: beta,      // Front-back tilt
+                y: gamma,     // Left-right tilt
+                z: alpha      // Compass direction
+            };
+        }
 
         // Apply low-pass filter
         this.applyLowPassFilter();

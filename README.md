@@ -75,9 +75,11 @@ The app works best when calibrated:
 ### Sensor Technology
 
 - Uses Device Orientation API (alpha/beta/gamma angles)
+- **Automatic orientation detection** - Adjusts sensor axes for portrait/landscape
 - Low-pass filter with α = 0.2 for noise reduction
 - Real-time processing using `requestAnimationFrame`
 - ±0.2° accuracy after calibration
+- Smart axis mapping ensures correct bubble movement in all orientations
 
 ### Performance
 
@@ -90,7 +92,7 @@ The app works best when calibrated:
 
 The app features comprehensive responsive design optimizations:
 
-- **Portrait & Landscape Support** - Seamless switching between orientations
+- **Portrait & Landscape Support** - Seamless switching between orientations with automatic sensor axis adjustment
 - **Screen Size Adaptations**:
   - Desktop/Tablet: Full-size interface with large, clear displays
   - Small screens (< 480px): Optimized layouts with adjusted font sizes
@@ -160,6 +162,16 @@ This implementation satisfies all requirements from `req.json`:
 ## Responsive Design Features
 
 The Spirit Level PWA includes extensive responsive design implementation:
+
+### Orientation Handling
+
+**Automatic Portrait/Landscape Detection:**
+- The app detects screen orientation in real-time using window dimensions
+- Automatically swaps sensor axes when switching between portrait and landscape
+- In **portrait mode**: Beta (front-back) and Gamma (left-right) map normally
+- In **landscape mode**: Axes are intelligently swapped so bubble movement matches screen orientation
+- Listens to both `orientationchange` and `resize` events for instant adaptation
+- Ensures accurate leveling regardless of how the device is held
 
 ### Breakpoints & Optimizations
 
